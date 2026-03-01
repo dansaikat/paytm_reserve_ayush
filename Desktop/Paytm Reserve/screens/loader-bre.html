@@ -73,7 +73,7 @@
   .nav-back svg { width: 9px; height: 16px; }
   .nav-center {
     position: absolute; left: 50%; transform: translateX(-50%);
-    display: flex; align-items: center; height: 44px;
+    display: flex; align-items: center; gap: 8px; height: 44px;
   }
   .nav-brand { height: 30px; width: auto; }
 
@@ -269,7 +269,19 @@
       <svg viewBox="0 0 10 18" fill="none"><path d="M9 1L1 9L9 17" stroke="var(--neutral-800)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <div class="nav-center">
-      <img src="../assets/brand-logo.svg" alt="Paytm Reserve" class="nav-brand">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;overflow:hidden;flex-shrink:0">
+          <svg viewBox="0 0 32 32" fill="none" width="32" height="32">
+            <defs><linearGradient id="mlg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00B8F5"/><stop offset="100%" stop-color="#0088CC"/></linearGradient></defs>
+            <rect width="32" height="32" rx="8" fill="url(#mlg)"/>
+            <text x="16" y="22" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">₹</text>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <span style="font-size:17px;font-weight:600;line-height:22px;color:#1B1B1B">Merchant</span>
+          <span style="font-size:17px;font-weight:600;line-height:22px;color:#1B1B1B">Loan</span>
+        </div>
+      </div>
     </div>
     <div style="width: 36px;"></div>
   </div>

@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Paytm Reserve — Merchant Loan Home V2</title>
+  <style>
+    *,*::before,*::after { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    button, input { font-family: inherit; font-size: inherit; }
+
+    :root {
+      --blue-500: #0088FF;
+      --blue-600: #1576DB;
+      --blue-700: #004299;
+      --blue-900: #012A72;
+      --blue-300: #00B8F5;
+      --blue-50: #E8F4FF;
+
+      --success-500: #34C759;
+      --success-50: rgba(52, 199, 89, 0.1);
+      --success-surface: #EAFFF4;
+      --success-700: #009454;
+
+      --warning-500: #F68832;
+      --warning-50: #FFF3E8;
+
+      --neutral-800: #1B1B1B;
+      --neutral-700: #282828;
+      --neutral-600: #333333;
+      --neutral-500: #404040;
+      --neutral-400: #595959;
+      --neutral-300: #7E7E7E;
+      --neutral-200: #999999;
+      --neutral-100: #D9D9D9;
+      --neutral-50: #E6E6E6;
+
+      --surface-primary: #FFFFFF;
+      --surface-secondary: #F2F2F7;
+      --surface-tertiary: #F7F7F7;
+
+      --radius-xs: 4px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --radius-xl: 24px;
+      --radius-pill: 100px;
+
+      --shadow-subtle: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-card: 0 2px 12px rgba(0,0,0,0.06);
+      --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    html {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'SF Pro Display', system-ui, sans-serif;
+      background: #EAEAEA;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      width: 376px;
+      max-width: 376px;
+      margin: 0 auto;
+      background: var(--surface-secondary);
+      color: var(--neutral-800);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      box-shadow: 0 0 40px rgba(0,0,0,.12);
+    }
+
+    /* ===== STATUS BAR ===== */
+    .status-bar {
+      height: 44px;
+      background: var(--surface-primary);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 20px 8px;
+    }
+    .status-bar__time { font-size: 15px; font-weight: 600; color: var(--neutral-800); }
+    .status-bar__icons { display: flex; align-items: center; gap: 5px; }
+    .status-bar__icons svg { width: 16px; height: 16px; }
+
+    /* ===== NAV BAR ===== */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px 14px;
+      background: var(--surface-primary);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .nav-back {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      background: var(--surface-secondary);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: background 0.15s ease;
+    }
+    .nav-back:active { background: var(--neutral-50); }
+    .nav-back svg { width: 9px; height: 16px; }
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+    }
+    .nav-brand-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--blue-500);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav-brand-icon svg { width: 18px; height: 18px; }
+    .nav-brand-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .nav-brand-title { font-size: 17px; font-weight: 600; line-height: 22px; color: var(--neutral-800); }
+    .nav-brand-sub { font-size: 10px; font-weight: 400; line-height: 12px; color: var(--neutral-300); }
+    .nav-help {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--neutral-800);
+      cursor: pointer;
+      border: none;
+      background: var(--surface-secondary);
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      flex-shrink: 0;
+      letter-spacing: -0.23px;
+      transition: background 0.15s ease;
+    }
+    .nav-help:active { background: var(--neutral-50); }
+
+    /* ===== CONTENT ===== */
+    .content { padding: 0 0 40px; }
+
+    /* ===== SECTION SPACER ===== */
+    .section-spacer { height: 8px; background: var(--surface-secondary); }
+
+    /* ===== TERM LOAN CAROUSEL ===== */
+    .carousel-section { padding: 20px 16px 16px; background: var(--surface-primary); }
+    .carousel-section-title { font-size: 17px; font-weight: 600; line-height: 22px; color: var(--neutral-800); margin-bottom: 12px; letter-spacing: -0.43px; }
+    .carousel-viewport { overflow: hidden; position: relative; }
+    .carousel-track { display: flex; transition: transform .35s cubic-bezier(.4,0,.2,1); }
+    .carousel-card { min-width: 100%; padding: 16px; background: var(--surface-secondary); border-radius: var(--radius-md); display: flex; align-items: center; gap: 12px; }
+    .carousel-card__icon { width: 40px; height: 40px; background: var(--blue-50); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .carousel-card__icon svg { width: 20px; height: 20px; }
+    .carousel-card__body { flex: 1; min-width: 0; }
+    .carousel-card__title { font-size: 15px; font-weight: 600; line-height: 20px; color: var(--neutral-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .carousel-card__sub { font-size: 13px; font-weight: 500; line-height: 18px; color: var(--blue-600); margin-top: 2px; }
+    .carousel-card__cta { padding: 8px 18px; border-radius: var(--radius-pill); border: 1.5px solid var(--blue-700); background: transparent; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--blue-700); cursor: pointer; white-space: nowrap; transition: background .15s; -webkit-tap-highlight-color: transparent; }
+    .carousel-card__cta:active { background: var(--blue-50); }
+
+    .carousel-dots { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 0 0; }
+    .carousel-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--neutral-100); transition: all .25s; }
+    .carousel-dot--active { width: 8px; height: 8px; background: var(--blue-500); }
+
+    /* ===== RESERVE CREDIT SECTION ===== */
+    .reserve-section { background: var(--surface-primary); padding: 0; overflow: hidden; box-shadow: var(--shadow-card); }
+    .reserve-header { padding: 20px 16px 0; }
+    .reserve-header__title { font-size: 20px; font-weight: 700; line-height: 25px; color: var(--neutral-800); letter-spacing: -0.23px; }
+
+    .reserve-limits { display: flex; align-items: center; justify-content: space-between; padding: 16px 16px 0; }
+    .limit-group { display: flex; gap: 24px; }
+    .limit-item__label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--neutral-300); margin-bottom: 3px; letter-spacing: -0.08px; }
+    .limit-item__value { font-size: 17px; font-weight: 700; line-height: 22px; color: var(--neutral-800); letter-spacing: -0.43px; }
+    .limit-item__value--green { color: var(--success-700); }
+
+    .withdraw-btn {
+      padding: 10px 20px;
+      border-radius: var(--radius-pill);
+      background: var(--blue-900);
+      border: none;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #FFFFFF;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(1,42,114,0.25);
+      transition: transform .12s, opacity .12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .withdraw-btn:active { transform: scale(.97); opacity: .9; }
+
+    /* Progress bar */
+    .progress-section { padding: 16px 16px 20px; }
+    .progress-bar { height: 4px; background: var(--neutral-100); border-radius: var(--radius-pill); overflow: hidden; margin-bottom: 6px; }
+    .progress-bar__fill { height: 100%; background: var(--blue-500); border-radius: var(--radius-pill); transition: width 1s cubic-bezier(.4,0,.2,1); }
+    .progress-label { font-size: 12px; font-weight: 400; line-height: 18px; color: var(--neutral-300); letter-spacing: -0.08px; }
+
+    /* Accordion sections */
+    .accordion { border-top: 1px solid var(--neutral-50); }
+    .accordion-trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 16px; background: transparent; border: none; cursor: pointer; font-family: inherit; -webkit-tap-highlight-color: transparent; }
+    .accordion-trigger__text { font-size: 15px; font-weight: 600; line-height: 20px; color: var(--blue-600); }
+    .accordion-trigger__text--muted { color: var(--neutral-300); }
+    .accordion-trigger__icon { width: 16px; height: 16px; transition: transform .25s ease; color: var(--blue-600); }
+    .accordion-trigger__icon--muted { color: var(--neutral-300); }
+    .accordion-trigger.open .accordion-trigger__icon { transform: rotate(180deg); }
+    .accordion-body { max-height: 0; overflow: hidden; transition: max-height .35s cubic-bezier(.4,0,.2,1); }
+    .accordion-body--open { max-height: 600px; }
+    .accordion-body__inner { padding: 0 16px 20px; }
+
+    /* Loan list item */
+    .loan-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: var(--surface-primary); border-radius: var(--radius-md); margin-bottom: 8px; cursor: pointer; box-shadow: var(--shadow-subtle); transition: box-shadow .2s; -webkit-tap-highlight-color: transparent; }
+    .loan-item:last-child { margin-bottom: 0; }
+    .loan-item:active { box-shadow: var(--shadow-card); }
+    .loan-item__body { flex: 1; min-width: 0; }
+    .loan-item__name { font-size: 15px; font-weight: 600; line-height: 20px; color: var(--neutral-800); }
+    .loan-item__due { font-size: 13px; font-weight: 400; line-height: 18px; color: var(--neutral-500); margin-top: 2px; }
+    .loan-item__action { font-size: 13px; font-weight: 600; line-height: 18px; color: var(--blue-600); margin-top: 4px; cursor: pointer; }
+    .loan-item__chevron { width: 20px; height: 20px; flex-shrink: 0; color: var(--neutral-200); }
+    .loan-item__chevron svg { width: 16px; height: 16px; }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 16px 0; color: var(--neutral-300); font-size: 13px; font-weight: 400; }
+
+    /* ===== TERM LOANS SECTION ===== */
+    .term-section { background: var(--surface-primary); overflow: hidden; box-shadow: var(--shadow-card); }
+    .term-header { padding: 20px 16px 0; }
+    .term-header__title { font-size: 20px; font-weight: 700; line-height: 25px; color: var(--neutral-800); letter-spacing: -0.23px; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { animation: fadeUp .45s cubic-bezier(.22,1,.36,1) both; }
+    .d0 { animation-delay: 0s; } .d1 { animation-delay: .08s; } .d2 { animation-delay: .16s; } .d3 { animation-delay: .24s; }
+
+    /* Lender logo */
+    .lender-logo { width: 44px; height: 44px; border-radius: var(--radius-sm); background: var(--surface-primary); box-shadow: var(--shadow-subtle); display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; padding: 4px; }
+    .lender-logo svg { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-bar__time">9:41</span>
+    <div class="status-bar__icons">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M1.5 11.5h2v3h-2zM5 9h2v5.5H5zM8.5 6.5h2v8h-2zM12 4h2v10.5h-2z" fill="#101010" opacity=".7"/></svg>
+      <svg viewBox="0 0 16 16" fill="none"><path d="M2 12C2 7.58 5.58 4 10 4M5 12c0-2.76 2.24-5 5-5M8 12a2 2 0 012-2" stroke="#101010" stroke-width="1.5" stroke-linecap="round" opacity=".7"/></svg>
+      <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="4.5" width="12" height="7" rx="1.5" stroke="#101010" stroke-width="1.2" opacity=".7"/><rect x="3" y="6.5" width="6" height="3" rx=".5" fill="#101010" opacity=".7"/><rect x="13.5" y="6.5" width="1.5" height="3" rx=".5" fill="#101010" opacity=".4"/></svg>
+    </div>
+  </div>
+
+  <!-- NAV BAR -->
+  <div class="nav-bar">
+    <button class="nav-back">
+      <svg viewBox="0 0 9 16" fill="none"><path d="M8 1L1 8L8 15" stroke="#1B1B1B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav-center">
+      <div class="nav-brand-icon">
+        <svg viewBox="0 0 18 18" fill="none">
+          <text x="9" y="13" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">₹</text>
+        </svg>
+      </div>
+      <div class="nav-brand-text">
+        <span class="nav-brand-title">Merchant</span>
+        <span class="nav-brand-sub">Loan</span>
+      </div>
+    </div>
+    <button class="nav-help">Help</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TERM LOAN CAROUSEL -->
+    <div class="carousel-section anim d0">
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carouselTrack">
+
+          <!-- Card 1 -->
+          <div class="carousel-card">
+            <div class="carousel-card__icon">
+              <svg viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="#004299" stroke-width="1.5" fill="none"/>
+                <path d="M10 6v4l2.5 1.5" stroke="#004299" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="carousel-card__body">
+              <div class="carousel-card__title">Term Loan · ML-2024-0156</div>
+              <div class="carousel-card__sub">₹25,000 due on Mar 5</div>
+            </div>
+            <button class="carousel-card__cta">Pay Now</button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="carousel-card">
+            <div class="carousel-card__icon">
+              <svg viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="#004299" stroke-width="1.5" fill="none"/>
+                <path d="M10 6v4l2.5 1.5" stroke="#004299" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="carousel-card__body">
+              <div class="carousel-card__title">Term Loan · ML-2024-0289</div>
+              <div class="carousel-card__sub">₹18,000 due on Mar 12</div>
+            </div>
+            <button class="carousel-card__cta">Pay Now</button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="carousel-card">
+            <div class="carousel-card__icon">
+              <svg viewBox="0 0 20 20" fill="none">
+                <circle cx="10" cy="10" r="8" stroke="#004299" stroke-width="1.5" fill="none"/>
+                <path d="M10 6v4l2.5 1.5" stroke="#004299" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="carousel-card__body">
+              <div class="carousel-card__title">Term Loan · ML-2024-0412</div>
+              <div class="carousel-card__sub">₹12,500 due on Mar 18</div>
+            </div>
+            <button class="carousel-card__cta">Pay Now</button>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-dots" id="carouselDots">
+        <div class="carousel-dot carousel-dot--active" data-index="0"></div>
+        <div class="carousel-dot" data-index="1"></div>
+        <div class="carousel-dot" data-index="2"></div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- RESERVE CREDIT SECTION -->
+    <div class="reserve-section anim d1">
+      <div class="reserve-header">
+        <span class="reserve-header__title">Reserve Credit</span>
+      </div>
+
+      <div class="reserve-limits">
+        <div class="limit-group">
+          <div class="limit-item">
+            <div class="limit-item__label">Total Limit</div>
+            <div class="limit-item__value">₹1,00,000</div>
+          </div>
+          <div class="limit-item">
+            <div class="limit-item__label">Available</div>
+            <div class="limit-item__value limit-item__value--green">₹50,000</div>
+          </div>
+        </div>
+        <button class="withdraw-btn" onclick="location.href='screens/withdraw-funds.html'">Withdraw Funds</button>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-bar">
+          <div class="progress-bar__fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <span class="progress-label">50.0% used</span>
+      </div>
+
+      <!-- Active Loans Accordion -->
+      <div class="accordion">
+        <button class="accordion-trigger open" id="activeLoansToggle">
+          <span class="accordion-trigger__text">Active Loans (2)</span>
+          <svg class="accordion-trigger__icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="accordion-body accordion-body--open" id="activeLoansBody">
+          <div class="accordion-body__inner">
+
+            <!-- Loan 1 -->
+            <div class="loan-item">
+              <div class="lender-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" fill="#fff"/>
+                  <text x="20" y="14" font-family="-apple-system,sans-serif" font-size="6" font-weight="700" fill="#1a1a6e" text-anchor="middle">SHRIRAM</text>
+                  <text x="20" y="22" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1a1a6e" text-anchor="middle">FINANCE</text>
+                  <rect x="6" y="26" width="28" height="3" rx="1" fill="#d4a017"/>
+                  <rect x="6" y="30" width="28" height="1" rx=".5" fill="#1a1a6e"/>
+                </svg>
+              </div>
+              <div class="loan-item__body">
+                <div class="loan-item__name">Loan Amount: ₹25,000</div>
+                <div class="loan-item__due">₹10,000 due on Mar 12</div>
+                <div class="loan-item__action">Pay early</div>
+              </div>
+              <div class="loan-item__chevron">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+            <!-- Loan 2 -->
+            <div class="loan-item">
+              <div class="lender-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" fill="#fff"/>
+                  <text x="20" y="14" font-family="-apple-system,sans-serif" font-size="6" font-weight="700" fill="#1a1a6e" text-anchor="middle">SHRIRAM</text>
+                  <text x="20" y="22" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1a1a6e" text-anchor="middle">FINANCE</text>
+                  <rect x="6" y="26" width="28" height="3" rx="1" fill="#d4a017"/>
+                  <rect x="6" y="30" width="28" height="1" rx=".5" fill="#1a1a6e"/>
+                </svg>
+              </div>
+              <div class="loan-item__body">
+                <div class="loan-item__name">Loan Amount: ₹25,000</div>
+                <div class="loan-item__due">₹15,000 due on Mar 20</div>
+                <div class="loan-item__action">Pay early</div>
+              </div>
+              <div class="loan-item__chevron">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Closed Loans Accordion -->
+      <div class="accordion" style="border-top:none">
+        <button class="accordion-trigger" id="closedLoansToggle">
+          <span class="accordion-trigger__text accordion-trigger__text--muted">Closed Loans (0)</span>
+          <svg class="accordion-trigger__icon accordion-trigger__icon--muted" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="accordion-body" id="closedLoansBody">
+          <div class="accordion-body__inner">
+            <div class="empty-state">No closed loans yet</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- TERM LOANS SECTION -->
+    <div class="term-section anim d2">
+      <div class="term-header">
+        <span class="term-header__title">Term Loans</span>
+      </div>
+
+      <!-- Active Loans Accordion -->
+      <div class="accordion">
+        <button class="accordion-trigger open" id="termActiveToggle">
+          <span class="accordion-trigger__text">Active Loans (2)</span>
+          <svg class="accordion-trigger__icon" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="accordion-body accordion-body--open" id="termActiveBody">
+          <div class="accordion-body__inner">
+
+            <div class="loan-item">
+              <div class="lender-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" fill="#fff"/>
+                  <text x="20" y="14" font-family="-apple-system,sans-serif" font-size="6" font-weight="700" fill="#1a1a6e" text-anchor="middle">SHRIRAM</text>
+                  <text x="20" y="22" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1a1a6e" text-anchor="middle">FINANCE</text>
+                  <rect x="6" y="26" width="28" height="3" rx="1" fill="#d4a017"/>
+                  <rect x="6" y="30" width="28" height="1" rx=".5" fill="#1a1a6e"/>
+                </svg>
+              </div>
+              <div class="loan-item__body">
+                <div class="loan-item__name">Loan Amount: ₹2,50,000</div>
+                <div class="loan-item__due">₹25,000 due on Mar 5</div>
+                <div class="loan-item__action">Pay early</div>
+              </div>
+              <div class="loan-item__chevron">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+            <div class="loan-item">
+              <div class="lender-logo">
+                <svg viewBox="0 0 40 40" fill="none">
+                  <rect width="40" height="40" fill="#fff"/>
+                  <text x="20" y="14" font-family="-apple-system,sans-serif" font-size="6" font-weight="700" fill="#1a1a6e" text-anchor="middle">SHRIRAM</text>
+                  <text x="20" y="22" font-family="-apple-system,sans-serif" font-size="5" font-weight="600" fill="#1a1a6e" text-anchor="middle">FINANCE</text>
+                  <rect x="6" y="26" width="28" height="3" rx="1" fill="#d4a017"/>
+                  <rect x="6" y="30" width="28" height="1" rx=".5" fill="#1a1a6e"/>
+                </svg>
+              </div>
+              <div class="loan-item__body">
+                <div class="loan-item__name">Loan Amount: ₹1,75,000</div>
+                <div class="loan-item__due">₹18,000 due on Mar 12</div>
+                <div class="loan-item__action">Pay early</div>
+              </div>
+              <div class="loan-item__chevron">
+                <svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Closed Loans Accordion -->
+      <div class="accordion" style="border-top:none">
+        <button class="accordion-trigger" id="termClosedToggle">
+          <span class="accordion-trigger__text accordion-trigger__text--muted">Closed Loans (0)</span>
+          <svg class="accordion-trigger__icon accordion-trigger__icon--muted" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="accordion-body" id="termClosedBody">
+          <div class="accordion-body__inner">
+            <div class="empty-state">No closed loans yet</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script>
+    // Carousel swipe + auto-advance
+    (function(){
+      var track = document.getElementById('carouselTrack');
+      var dots = document.querySelectorAll('.carousel-dot');
+      var current = 0;
+      var total = track.children.length;
+      var startX = 0;
+      var deltaX = 0;
+      var dragging = false;
+
+      function goTo(index){
+        if(index < 0) index = 0;
+        if(index >= total) index = total - 1;
+        current = index;
+        track.style.transform = 'translateX(-' + (current * 100) + '%)';
+        dots.forEach(function(d,i){ d.classList.toggle('carousel-dot--active', i === current) });
+      }
+
+      track.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; dragging = true; });
+      track.addEventListener('touchmove', function(e){ if(dragging) deltaX = e.touches[0].clientX - startX; });
+      track.addEventListener('touchend', function(){
+        if(Math.abs(deltaX) > 40){
+          goTo(current + (deltaX < 0 ? 1 : -1));
+        }
+        deltaX = 0; dragging = false;
+      });
+
+      dots.forEach(function(d){ d.addEventListener('click', function(){ goTo(parseInt(d.dataset.index)) }) });
+
+      // Auto-advance every 4s
+      setInterval(function(){ goTo((current + 1) % total) }, 4000);
+    })();
+
+    // Accordion toggle
+    function setupAccordion(triggerId, bodyId){
+      var trigger = document.getElementById(triggerId);
+      var body = document.getElementById(bodyId);
+      trigger.addEventListener('click', function(){
+        trigger.classList.toggle('open');
+        body.classList.toggle('accordion-body--open');
+      });
+    }
+    setupAccordion('activeLoansToggle', 'activeLoansBody');
+    setupAccordion('closedLoansToggle', 'closedLoansBody');
+    setupAccordion('termActiveToggle', 'termActiveBody');
+    setupAccordion('termClosedToggle', 'termClosedBody');
+
+    // Progress bar animation
+    window.addEventListener('DOMContentLoaded', function(){
+      setTimeout(function(){
+        document.getElementById('progressFill').style.width = '50%';
+      }, 400);
+    });
+  </script>
+
+</body>
+</html>

@@ -415,7 +415,19 @@
       <svg viewBox="0 0 10 18" fill="none"><path d="M9 1L1 9L9 17" stroke="var(--neutral-800)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <div class="nav-center">
-      <img src="../assets/brand-logo.svg" alt="Paytm Reserve" class="nav-brand">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="width:32px;height:32px;border-radius:8px;overflow:hidden;flex-shrink:0">
+          <svg viewBox="0 0 32 32" fill="none" width="32" height="32">
+            <defs><linearGradient id="mlg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#00B8F5"/><stop offset="100%" stop-color="#0088CC"/></linearGradient></defs>
+            <rect width="32" height="32" rx="8" fill="url(#mlg)"/>
+            <text x="16" y="22" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="#fff" text-anchor="middle">₹</text>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <span style="font-size:17px;font-weight:600;line-height:22px;color:#1B1B1B">Merchant</span>
+          <span style="font-size:17px;font-weight:600;line-height:22px;color:#1B1B1B">Loan</span>
+        </div>
+      </div>
     </div>
     <button class="nav-help">Help</button>
   </div>
@@ -433,7 +445,9 @@
         <div class="hero-text">
           <div class="hero-subtitle">Your reserve credit limit</div>
           <div class="hero-amount">₹1,00,000</div>
+          <span style="font-size:12px;font-weight:400;color:#7E7E7E">Valid upto: <strong style="font-weight:600;color:#414244">01 Jun 26</strong></span>
         </div>
+      
       </div>
     </div>
 
@@ -443,7 +457,7 @@
     <div class="steps-section animate-in delay-2">
       <div class="steps-header">
         <span class="steps-title">Ready to withdraw</span>
-        <span class="steps-progress done">2 of 2</span>
+        <span class="steps-progress done">3 of 3</span>
       </div>
 
       <!-- Step 1: KYC — COMPLETED -->
@@ -465,7 +479,26 @@
         </div>
       </div>
 
-      <!-- Step 2: UPI AutoPay — COMPLETED -->
+      <!-- Step 2: Bank Account — COMPLETED -->
+      <div class="step-card completed">
+        <div class="step-card-inner">
+          <div class="step-icon" style="background: var(--success-surface);">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9.5Z" stroke="var(--success-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="var(--success-700)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="step-content">
+            <div class="step-label" style="color: var(--success-700);">Completed</div>
+            <div class="step-name">Bank Account Added</div>
+            <div class="step-desc">HDFC Bank account linked successfully</div>
+          </div>
+          <div class="step-action">
+            <div class="step-done-icon">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: UPI AutoPay — COMPLETED -->
       <div class="step-card completed">
         <div class="step-card-inner">
           <div class="step-icon" style="background: var(--success-surface);">
@@ -488,7 +521,7 @@
     <!-- Sticky CTA -->
     <div class="sticky-cta animate-in delay-4">
       <div class="sticky-cta-inner">
-        <button class="cta-btn enabled" onclick="window.location.href='loader-bank.html'">Withdraw Funds</button>
+        <button class="cta-btn enabled" onclick="window.location.href='withdraw-funds.html'">Withdraw Funds</button>
       </div>
       <div class="home-indicator"></div>
     </div>
