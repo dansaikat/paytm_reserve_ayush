@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paytm Reserve — Flow Demo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    color: #fff;
+    overflow: auto;
+    padding: 20px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .controls button {
+    padding: 8px 20px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .controls button:hover { background: rgba(255,255,255,0.12); }
+  .controls button.active {
+    background: #0088FF;
+    border-color: #0088FF;
+  }
+  .screen-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: -0.2px;
+    min-width: 200px;
+    text-align: center;
+  }
+
+  .phone-wrapper {
+    position: relative;
+  }
+  .phone-frame {
+    width: 392px;
+    height: 828px;
+    border-radius: 50px;
+    border: 8px solid #2a2a2a;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 0 0 2px #111,
+      inset 0 0 0 1px rgba(255,255,255,0.05),
+      0 30px 80px rgba(0,0,0,0.6);
+  }
+  .dynamic-island {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+  .phone-frame iframe {
+    width: 376px;
+    height: 812px;
+    border: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fff;
+  }
+
+  .progress-bar {
+    display: flex;
+    gap: 6px;
+    margin-top: 24px;
+  }
+  .progress-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .progress-dot.active {
+    background: #0088FF;
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .speed-control {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+  .speed-control input {
+    width: 100px;
+    accent-color: #0088FF;
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button onclick="prevScreen()">← Prev</button>
+  <span class="screen-label" id="screenLabel"></span>
+  <button onclick="nextScreen()">Next →</button>
+  <button id="playBtn" class="active" onclick="togglePlay()">⏸ Pause</button>
+</div>
+
+<div class="phone-wrapper">
+  <div class="phone-frame">
+    <div class="dynamic-island"></div>
+    <iframe id="screenFrame" src="loader-marketplace.html"></iframe>
+  </div>
+</div>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="speed-control">
+  <span>Speed:</span>
+  <input type="range" min="3000" max="12000" value="6000" step="500" id="speedSlider" oninput="updateSpeed()">
+  <span id="speedLabel">6.0s</span>
+</div>
+
+<script>
+  const screens = [
+    { file: 'loader-marketplace.html', name: 'Finding Offers', isLoader: true },
+    { file: 'landing.html', name: 'Landing' },
+    { file: 'loader.html', name: 'Processing', isLoader: true },
+    { file: 'loader-bre.html', name: 'Preparing Offer', isLoader: true },
+    { file: 'merchant-dashboard.html', name: 'Limit Unlocked' },
+    { file: 'loader-kyc.html', name: 'Verifying KYC', isLoader: true },
+    { file: 'merchant-dashboard-kyc-done.html', name: 'KYC Complete' },
+    { file: 'loader-autopay.html', name: 'Setting Up AutoPay', isLoader: true },
+    { file: 'merchant-dashboard-all-done.html', name: 'All Steps Done' },
+    { file: 'loader-bank.html', name: 'Verifying Bank', isLoader: true },
+    { file: 'withdraw-funds.html', name: 'Withdraw Funds' },
+    { file: 'loader-disbursal.html', name: 'Disbursing', isLoader: true },
+    { file: 'post-withdrawal.html', name: 'Disbursement Initiated' }
+  ];
+
+  let current = 0;
+  let playing = true;
+  let interval = null;
+  let speed = 6000;
+
+  const frame = document.getElementById('screenFrame');
+  const label = document.getElementById('screenLabel');
+  const bar = document.getElementById('progressBar');
+  const playBtn = document.getElementById('playBtn');
+
+  screens.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    bar.appendChild(dot);
+  });
+
+  function goTo(idx) {
+    current = idx;
+    frame.src = screens[current].file;
+    label.textContent = (current + 1) + ' / ' + screens.length + ' — ' + screens[current].name;
+    bar.querySelectorAll('.progress-dot').forEach((d, i) => {
+      d.className = 'progress-dot' + (i === current ? ' active' : '');
+    });
+  }
+
+  function nextScreen() {
+    goTo((current + 1) % screens.length);
+    if (playing) scheduleNext();
+  }
+
+  function prevScreen() {
+    goTo((current - 1 + screens.length) % screens.length);
+    if (playing) scheduleNext();
+  }
+
+  function togglePlay() {
+    playing = !playing;
+    playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+    playBtn.classList.toggle('active', playing);
+    if (playing) startAuto();
+    else stopAuto();
+  }
+
+  function scheduleNext() {
+    stopAuto();
+    const dur = screens[current].isLoader ? Math.max(speed, 7000) : speed;
+    interval = setTimeout(() => { nextScreen(); }, dur);
+  }
+
+  function startAuto() {
+    scheduleNext();
+  }
+
+  function stopAuto() {
+    if (interval) clearTimeout(interval);
+    interval = null;
+  }
+
+  function updateSpeed() {
+    speed = parseInt(document.getElementById('speedSlider').value);
+    document.getElementById('speedLabel').textContent = (speed / 1000).toFixed(1) + 's';
+    if (playing) scheduleNext();
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') nextScreen();
+    if (e.key === 'ArrowLeft') prevScreen();
+    if (e.key === ' ') { e.preventDefault(); togglePlay(); }
+  });
+
+  goTo(0);
+  startAuto();
+</script>
+
+</body>
+</html>

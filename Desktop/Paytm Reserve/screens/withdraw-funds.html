@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Reserve Credit — Withdraw Funds</title>
+<style>
+  :root {
+    --blue-500: #0088FF;
+    --blue-600: #1576DB;
+    --blue-700: #004299;
+    --blue-900: #012A72;
+    --blue-300: #00B8F5;
+    --blue-50: #E8F4FF;
+
+    --success-500: #34C759;
+    --success-50: rgba(52, 199, 89, 0.1);
+    --success-surface: #EAFFF4;
+    --success-700: #009454;
+
+    --gold-500: #FAAB2C;
+    --gold-400: #FCCF3C;
+    --gold-200: #FDDF7D;
+
+    --warning-500: #F68832;
+    --warning-50: #FFF3E8;
+
+    --neutral-900: #000000;
+    --neutral-850: #101010;
+    --neutral-800: #1B1B1B;
+    --neutral-700: #282828;
+    --neutral-600: #333333;
+    --neutral-500: #404040;
+    --neutral-400: #595959;
+    --neutral-300: #7E7E7E;
+    --neutral-200: #999999;
+    --neutral-100: #D9D9D9;
+    --neutral-50: #E6E6E6;
+
+    --surface-primary: #FFFFFF;
+    --surface-secondary: #F2F2F7;
+    --surface-tertiary: #F7F7F7;
+
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-pill: 100px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-card: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'SF Pro Display', system-ui, sans-serif;
+    background: var(--surface-secondary);
+    color: var(--neutral-800);
+    overflow-x: hidden;
+  }
+
+  .device-frame {
+    width: 376px;
+    height: 812px;
+    margin: 0 auto;
+    background: var(--surface-secondary);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* === STATUS BAR === */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px 0;
+    height: 44px;
+    background: var(--surface-primary);
+    flex-shrink: 0;
+  }
+  .status-bar .time {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .status-bar .icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .status-bar .icons svg { width: 16px; height: 12px; }
+
+  /* === NAV BAR === */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px 14px;
+    background: var(--surface-primary);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .nav-back {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: var(--surface-secondary);
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  .nav-back:active { background: var(--neutral-50); }
+  .nav-back svg { width: 9px; height: 16px; }
+  .nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    height: 44px;
+  }
+  .nav-brand {
+    height: 30px;
+    width: auto;
+  }
+  .nav-help {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--neutral-800);
+    cursor: pointer;
+    border: none;
+    background: var(--surface-secondary);
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    flex-shrink: 0;
+    letter-spacing: -0.23px;
+    transition: background 0.15s ease;
+  }
+  .nav-help:active { background: var(--neutral-50); }
+
+  /* === SCROLLABLE CONTENT === */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* === HERO — WHITE CARD === */
+  .hero-wrapper {
+    background: var(--surface-secondary);
+    padding: 16px 12px 0;
+  }
+  .hero-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 24px 20px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .hero-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #282828;
+    letter-spacing: -0.08px;
+    margin-bottom: 8px;
+    line-height: 20px;
+  }
+  .hero-amount {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1576DB;
+    line-height: 48px;
+    font-feature-settings: 'tnum';
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Confetti decorations */
+  .confetti {
+    position: absolute;
+    border-radius: 2px;
+    z-index: 0;
+  }
+  .confetti-1 { width: 6px; height: 4px; background: #76D4FF; top: 58px; left: 20px; transform: rotate(162deg); }
+  .confetti-2 { width: 10px; height: 7px; background: #76D4FF; top: 22px; left: 42px; transform: rotate(-99deg); }
+  .confetti-3 { width: 10px; height: 7px; background: #FF7C02; bottom: 14px; left: 52px; transform: rotate(-17deg); }
+  .confetti-4 { width: 12px; height: 7px; background: #3FB781; bottom: 10px; right: 22px; transform: rotate(-70deg); }
+  .confetti-5 { width: 12px; height: 7px; background: #3FB781; top: 28px; right: 24px; transform: rotate(-63deg); }
+  .confetti-6 { width: 7px; height: 5px; background: #3FB781; top: 60px; right: 14px; transform: rotate(40deg); }
+
+  /* === SLIDER SECTION === */
+  .slider-section {
+    padding: 0 4px;
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .slider-track-wrapper {
+    position: relative;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+  .slider-track {
+    width: 100%;
+    height: 4px;
+    background: #E6E6E6;
+    border-radius: 2px;
+    position: relative;
+  }
+  .slider-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 4px;
+    background: var(--blue-600);
+    border-radius: 2px;
+    transition: width 0.05s linear;
+  }
+  .slider-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--blue-600);
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    z-index: 2;
+    touch-action: none;
+  }
+  .slider-thumb:active { cursor: grabbing; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  .slider-chevron {
+    width: 7px;
+    height: 12px;
+    stroke: var(--blue-600);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .slider-labels span {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--neutral-300);
+    letter-spacing: -0.08px;
+  }
+
+  /* === REMAINING BALANCE === */
+  .remaining-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+  }
+  .remaining-row svg { width: 14px; height: 14px; }
+  .remaining-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--neutral-400);
+    letter-spacing: -0.08px;
+  }
+  .remaining-text strong {
+    font-weight: 600;
+    color: var(--neutral-800);
+  }
+
+  /* === SECTION SPACER === */
+  .section-spacer {
+    height: 8px;
+    background: var(--surface-secondary);
+    flex-shrink: 0;
+  }
+
+  /* === WHITE SECTIONS === */
+  .content-section {
+    background: var(--surface-primary);
+    padding: 24px 20px;
+  }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--neutral-800);
+    letter-spacing: 0;
+    margin-bottom: 20px;
+  }
+
+  /* === REVIEW DETAILS === */
+  .detail-group {
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    padding: 16px 0;
+  }
+  .detail-group:first-of-type { padding-top: 0; }
+  .detail-group:last-of-type { border-bottom: none; }
+  .detail-group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .detail-label {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--neutral-500);
+    letter-spacing: -0.23px;
+  }
+  .detail-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--neutral-800);
+    letter-spacing: -0.23px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .detail-value .chevron-sm {
+    width: 10px;
+    height: 10px;
+    opacity: 0.4;
+  }
+  .detail-breakdown {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: var(--surface-tertiary);
+    border-radius: var(--radius-sm);
+  }
+  .detail-sub-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+  .detail-sub-label {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--neutral-400);
+    letter-spacing: -0.08px;
+  }
+  .detail-sub-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--neutral-600);
+    letter-spacing: -0.08px;
+  }
+  .detail-sub-value.deduction {
+    color: #D64545;
+  }
+  .detail-sub-row.total {
+    border-top: 1px solid rgba(0,0,0,0.06);
+    margin-top: 4px;
+    padding-top: 8px;
+  }
+  .detail-sub-row.total .detail-sub-label {
+    font-weight: 600;
+    color: var(--neutral-700);
+  }
+  .detail-sub-row.total .detail-sub-value {
+    font-weight: 600;
+    color: var(--neutral-800);
+  }
+  .detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .detail-row:last-of-type { border-bottom: none; }
+  .detail-note {
+    background: var(--blue-50);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .detail-note-text {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--neutral-500);
+    line-height: 18px;
+    letter-spacing: -0.08px;
+  }
+  .detail-note-text strong {
+    font-weight: 600;
+    color: var(--neutral-700);
+  }
+  .detail-note-text .read-more {
+    color: var(--blue-500);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* === BANK ACCOUNT SECTION === */
+  .bank-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .bank-card:last-of-type { border-bottom: none; }
+  .bank-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .bank-icon.hdfc {
+    background: #EBF0FF;
+    color: #1A3E82;
+  }
+  .bank-icon.sbi {
+    background: #E8F4FF;
+    color: #004B87;
+  }
+  .bank-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .bank-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--neutral-800);
+    letter-spacing: -0.23px;
+  }
+  .bank-desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--neutral-400);
+    margin-top: 2px;
+    letter-spacing: -0.08px;
+    line-height: 17px;
+  }
+  .bank-desc a {
+    color: var(--blue-500);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .bank-type {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--neutral-300);
+    background: var(--surface-secondary);
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+  }
+
+  /* === HOME ADDRESS === */
+  .address-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 4px 0;
+  }
+  .address-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .address-icon svg { width: 20px; height: 20px; }
+  .address-text {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--neutral-600);
+    letter-spacing: -0.23px;
+    line-height: 22px;
+    padding-top: 8px;
+  }
+
+  /* === KEY FACT STATEMENT === */
+  .kfs-card {
+    text-align: center;
+    padding: 8px 0;
+  }
+  .kfs-illustration {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+  .kfs-doc {
+    width: 52px;
+    height: 64px;
+    background: #E8F4FF;
+    border-radius: 6px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding-top: 8px;
+  }
+  .kfs-doc::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, transparent 50%, #CCDFF5 50%);
+    border-radius: 0 6px 0 0;
+  }
+  .kfs-doc-line {
+    width: 28px;
+    height: 3px;
+    background: var(--blue-500);
+    border-radius: 2px;
+    opacity: 0.3;
+  }
+  .kfs-doc-line:first-child { opacity: 0.5; }
+  .kfs-seal {
+    position: absolute;
+    bottom: 0;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--gold-500), var(--gold-200));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .kfs-seal svg { width: 14px; height: 14px; }
+  .kfs-link {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--neutral-800);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  .kfs-link svg { width: 16px; height: 16px; opacity: 0.4; }
+
+  /* === LEGAL CHECKBOXES === */
+  .legal-section {
+    background: var(--surface-primary);
+    padding: 20px 20px 24px;
+  }
+  .legal-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .legal-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--blue-500);
+    background: var(--blue-500);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .legal-checkbox svg { width: 12px; height: 12px; }
+  .legal-text {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--neutral-500);
+    line-height: 18px;
+    letter-spacing: -0.08px;
+  }
+  .legal-text a {
+    color: var(--blue-500);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .legal-also {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--neutral-500);
+    line-height: 18px;
+    letter-spacing: -0.08px;
+    padding: 10px 0;
+  }
+  .legal-also a {
+    color: var(--blue-500);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  /* === ADD ADVISOR === */
+  .advisor-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 0 4px;
+    cursor: pointer;
+  }
+  .advisor-link svg { width: 16px; height: 16px; }
+  .advisor-link span {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--blue-500);
+    letter-spacing: -0.23px;
+  }
+
+  /* === STICKY CTA === */
+  .sticky-cta {
+    background: var(--surface-primary);
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0,0,0,0.04);
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+  .sticky-cta-inner {
+    padding-bottom: env(safe-area-inset-bottom, 4px);
+  }
+  .cta-btn {
+    width: 100%;
+    padding: 16px 0;
+    border-radius: var(--radius-pill);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: -0.43px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    background: var(--blue-900);
+    color: var(--surface-primary);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(1, 42, 114, 0.25);
+  }
+  .cta-btn:active { opacity: 0.9; transform: scale(0.985); }
+
+  .cta-footer {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--neutral-300);
+    letter-spacing: -0.08px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  .cta-footer-logo {
+    height: 14px;
+    display: inline-block;
+  }
+
+  /* === HOME INDICATOR === */
+  .home-indicator {
+    width: 134px;
+    height: 5px;
+    background: var(--neutral-900);
+    border-radius: 3px;
+    margin: 6px auto 4px;
+    opacity: 0.18;
+  }
+
+  /* === Animations === */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in {
+    animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.1s; }
+  .delay-3 { animation-delay: 0.15s; }
+  .delay-4 { animation-delay: 0.2s; }
+  .delay-5 { animation-delay: 0.25s; }
+  .delay-6 { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div class="device-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 17 12" fill="none"><path d="M16.5 1C16.5 0.447 16.053 0 15.5 0H14.5C13.947 0 13.5 0.447 13.5 1V11C13.5 11.553 13.947 12 14.5 12H15.5C16.053 12 16.5 11.553 16.5 11V1Z" fill="currentColor"/><path d="M12 3C12 2.447 11.553 2 11 2H10C9.447 2 9 2.447 9 3V11C9 11.553 9.447 12 10 12H11C11.553 12 12 11.553 12 11V3Z" fill="currentColor"/><path d="M7.5 5.5C7.5 4.947 7.053 4.5 6.5 4.5H5.5C4.947 4.5 4.5 4.947 4.5 5.5V11C4.5 11.553 4.947 12 5.5 12H6.5C7.053 12 7.5 11.553 7.5 11V5.5Z" fill="currentColor"/><path d="M3 8C3 7.447 2.553 7 2 7H1C0.447 7 0 7.447 0 8V11C0 11.553 0.447 12 1 12H2C2.553 12 3 11.553 3 11V8Z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 16 12" fill="none"><path d="M8 3.6C9.7 3.6 11.2 4.3 12.3 5.4L13.8 3.9C12.3 2.4 10.3 1.5 8 1.5C5.7 1.5 3.7 2.4 2.2 3.9L3.7 5.4C4.8 4.3 6.3 3.6 8 3.6Z" fill="currentColor"/><path d="M8 6.8C9 6.8 9.9 7.2 10.5 7.8L12 6.3C11 5.3 9.6 4.7 8 4.7C6.4 4.7 5 5.3 4 6.3L5.5 7.8C6.1 7.2 7 6.8 8 6.8Z" fill="currentColor"/><circle cx="8" cy="10.5" r="1.5" fill="currentColor"/></svg>
+      <svg viewBox="0 0 25 12" fill="none"><rect x="0" y="1" width="21" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="currentColor"/><path d="M23 4.5V7.5C23.8 7.2 24.5 6.3 24.5 6C24.5 5.7 23.8 4.8 23 4.5Z" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <button class="nav-back" onclick="window.location.href='merchant-dashboard-all-done.html'">
+      <svg viewBox="0 0 10 18" fill="none"><path d="M9 1L1 9L9 17" stroke="var(--neutral-800)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav-center">
+      <img src="../assets/brand-logo.svg" alt="Paytm Reserve" class="nav-brand">
+    </div>
+    <button class="nav-help">Help</button>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="scroll-content">
+
+    <!-- Hero: White Card with Slider -->
+    <div class="hero-wrapper animate-in delay-1">
+      <div class="hero-card">
+        <!-- Confetti decorations -->
+        <div class="confetti confetti-1"></div>
+        <div class="confetti confetti-2"></div>
+        <div class="confetti confetti-3"></div>
+        <div class="confetti confetti-4"></div>
+        <div class="confetti confetti-5"></div>
+        <div class="confetti confetti-6"></div>
+
+        <div class="hero-label">Select your withdrawal amount</div>
+        <div class="hero-amount" id="displayAmount">₹60,000</div>
+
+        <!-- Slider -->
+        <div class="slider-section">
+          <div class="slider-track-wrapper" id="sliderWrapper">
+            <div class="slider-track">
+              <div class="slider-fill" id="sliderFill"></div>
+            </div>
+            <div class="slider-thumb" id="sliderThumb">
+              <svg class="slider-chevron" viewBox="0 0 7 12"><path d="M5.5 1L1.5 6L5.5 11"/></svg>
+              <svg class="slider-chevron" viewBox="0 0 7 12"><path d="M1.5 1L5.5 6L1.5 11"/></svg>
+            </div>
+          </div>
+          <div class="slider-labels">
+            <span>₹5,000</span>
+            <span>₹1,00,000</span>
+          </div>
+        </div>
+
+        <!-- Remaining balance -->
+        <div class="remaining-row">
+          <svg viewBox="0 0 16 16" fill="none"><path d="M8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" stroke="var(--neutral-300)" stroke-width="1.4"/><path d="M8 5.5V8.5" stroke="var(--neutral-300)" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="10.5" r="0.6" fill="var(--neutral-300)"/></svg>
+          <span class="remaining-text"><strong id="remainingAmount">₹40,000</strong> available for later</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Review Withdrawal Details -->
+    <div class="content-section animate-in delay-2">
+      <div class="section-title">Review withdrawal details</div>
+
+      <!-- Amount you get — expanded -->
+      <div class="detail-group" id="groupYouGet">
+        <div class="detail-group-header">
+          <span class="detail-label">Amount you get</span>
+          <span class="detail-value" id="amountYouGet">₹59,400 <svg class="chevron-sm" viewBox="0 0 10 10" fill="none"><path d="M3 4L5 6L7 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="detail-breakdown">
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Withdrawal amount</span>
+            <span class="detail-sub-value" id="subWithdrawal">₹60,000</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Conversion fee (1%)</span>
+            <span class="detail-sub-value deduction" id="subConversionFee">− ₹600</span>
+          </div>
+          <div class="detail-sub-row total">
+            <span class="detail-sub-label">In your account</span>
+            <span class="detail-sub-value" id="subNetAmount">₹59,400</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Amount you repay — expanded -->
+      <div class="detail-group" id="groupYouPay">
+        <div class="detail-group-header">
+          <span class="detail-label">Amount you repay</span>
+          <span class="detail-value" id="amountYouPay">₹60,000 <svg class="chevron-sm" viewBox="0 0 10 10" fill="none"><path d="M3 4L5 6L7 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </div>
+        <div class="detail-breakdown">
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Daily deduction (Day 31–60)</span>
+            <span class="detail-sub-value" id="subDailyDeduction">₹2,000 / day</span>
+          </div>
+          <div class="detail-sub-row">
+            <span class="detail-sub-label">Deduction period</span>
+            <span class="detail-sub-value">30 days</span>
+          </div>
+          <div class="detail-sub-row total">
+            <span class="detail-sub-label">Total repayment</span>
+            <span class="detail-sub-value" id="subTotalRepay">₹60,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tenure -->
+      <div class="detail-row">
+        <span class="detail-label">Tenure</span>
+        <span class="detail-value">60 days <svg class="chevron-sm" viewBox="0 0 10 10" fill="none"><path d="M3 4L5 6L7 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+
+      <div class="detail-note">
+        <div class="detail-note-text">
+          <strong>How repayment works:</strong> No payments for the first 30 days. From day 31, equal daily deductions are made from your settlement account until day 60. A 1% conversion fee is deducted upfront at the time of withdrawal. <a class="read-more" href="#">Read more</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Bank Accounts -->
+    <div class="content-section animate-in delay-3">
+      <div class="section-title">Review bank accounts</div>
+
+      <!-- Disbursal Account -->
+      <div class="bank-card">
+        <div class="bank-icon hdfc">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="#1A3E82" stroke-width="1.8"/><path d="M2 9h20" stroke="#1A3E82" stroke-width="1.8"/><path d="M6 14h4" stroke="#1A3E82" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </div>
+        <div class="bank-info">
+          <div class="bank-name">HDFC Bank – 2021</div>
+          <div class="bank-desc">You'll get money in this account</div>
+          <div class="bank-desc" style="color: var(--neutral-300); font-size: 12px;">Loan disbursal account</div>
+        </div>
+        <span class="bank-type">Disbursal</span>
+      </div>
+
+      <!-- Repayment Account -->
+      <div class="bank-card">
+        <div class="bank-icon sbi">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#004B87" stroke-width="1.8"/><path d="M12 7v5l3 2" stroke="#004B87" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="bank-info">
+          <div class="bank-name">State Bank of India – 2021</div>
+          <div class="bank-desc">Loan will be repaid from your settlement account via UPI Autopay. <a href="#">Know more</a></div>
+          <div class="bank-desc" style="color: var(--neutral-300); font-size: 12px;">Loan repayment account</div>
+        </div>
+        <span class="bank-type">Repayment</span>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Home Address -->
+    <div class="content-section animate-in delay-4">
+      <div class="section-title">Home address</div>
+      <div class="address-card">
+        <div class="address-icon">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3L21 9.5V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9.5Z" stroke="var(--neutral-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="var(--neutral-400)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="address-text">
+          Flat number 876H, Sector 5, RK Puram, Pincode – 110080
+        </div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Key Fact Statement -->
+    <div class="content-section animate-in delay-5" style="text-align: center;">
+      <div class="section-title" style="text-align: left;">Key Fact Statement</div>
+      <div class="kfs-illustration">
+        <div class="kfs-doc">
+          <div class="kfs-doc-line"></div>
+          <div class="kfs-doc-line"></div>
+          <div class="kfs-doc-line"></div>
+          <div class="kfs-doc-line"></div>
+        </div>
+        <div class="kfs-seal">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M9 12L11 14L15 10" stroke="#5C3D00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <a class="kfs-link" href="#">
+        Read Key Fact Statement
+        <svg viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Legal Agreements -->
+    <div class="legal-section animate-in delay-6">
+
+      <div class="legal-item">
+        <div class="legal-checkbox">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="legal-text">
+          By proceeding, I hereby acknowledge that I have read and understand the contents and terms of the Key Facts Statement (KFS).
+        </div>
+      </div>
+
+      <div class="legal-item">
+        <div class="legal-checkbox">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="legal-text">
+          By proceeding, I confirm that my current address is same as permanent address as shown above
+        </div>
+      </div>
+
+      <div class="legal-item">
+        <div class="legal-checkbox">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="legal-text">
+          By proceeding, I certify that my annual household income is greater than Rs 3.00 Lakhs.
+        </div>
+      </div>
+
+      <div class="legal-also">
+        Also, I confirm that I have read, understood and accept the <a href="#">sanction letter</a> along with the terms & conditions.
+      </div>
+
+      <div class="legal-also">
+        Further, I understand that the <a href="#">key fact statement</a>, <a href="#">sanction letter</a> cum <a href="#">loan agreement</a> will be sent to my registered mobile number post activation.
+      </div>
+
+      <div class="legal-item">
+        <div class="legal-checkbox">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6L5 8.5L9.5 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="legal-text">
+          I hereby declare that the declaration on the <a href="#">Business Ownership</a> is true and correct and that no content/statement is false and nothing has been concealed therefrom. <a href="#">Read Less</a>
+        </div>
+      </div>
+
+      <!-- Add Advisor -->
+      <div class="advisor-link">
+        <svg viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8h10" stroke="var(--blue-500)" stroke-width="1.8" stroke-linecap="round"/></svg>
+        <span>Add Loan Advisor ID (Optional)</span>
+      </div>
+    </div>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-cta">
+      <div class="sticky-cta-inner">
+        <button class="cta-btn" onclick="window.location.href='loader-disbursal.html'">Agree & Withdraw</button>
+        <div class="cta-footer">
+          Loan provided by
+          <svg class="cta-footer-logo" viewBox="0 0 60 18" fill="none">
+            <rect x="0" y="2" width="16" height="14" rx="3" fill="#DC3545"/>
+            <text x="3" y="13" font-size="10" font-weight="700" fill="white">U</text>
+            <text x="19" y="14" font-size="11" font-weight="700" fill="#1B1B1B">GRO</text>
+          </svg>
+        </div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+(function() {
+  const MIN = 5000;
+  const MAX = 100000;
+  const STEP = 1000;
+  const CONVERSION_FEE_RATE = 0.01;
+  const DEDUCTION_DAYS = 30;
+
+  let currentValue = 60000;
+
+  const thumb = document.getElementById('sliderThumb');
+  const fill = document.getElementById('sliderFill');
+  const wrapper = document.getElementById('sliderWrapper');
+  const displayAmount = document.getElementById('displayAmount');
+  const remainingAmount = document.getElementById('remainingAmount');
+  const amountYouGet = document.getElementById('amountYouGet');
+  const amountYouPay = document.getElementById('amountYouPay');
+  const subWithdrawal = document.getElementById('subWithdrawal');
+  const subConversionFee = document.getElementById('subConversionFee');
+  const subNetAmount = document.getElementById('subNetAmount');
+  const subDailyDeduction = document.getElementById('subDailyDeduction');
+  const subTotalRepay = document.getElementById('subTotalRepay');
+
+  function formatCurrency(val) {
+    if (val >= 100000) {
+      const lakhs = val / 100000;
+      if (lakhs === Math.floor(lakhs)) {
+        return '₹' + lakhs.toFixed(0) + ',00,000';
+      }
+    }
+    return '₹' + val.toLocaleString('en-IN');
+  }
+
+  function getPercent(val) {
+    return ((val - MIN) / (MAX - MIN)) * 100;
+  }
+
+  function snapToStep(val) {
+    return Math.round(val / STEP) * STEP;
+  }
+
+  function updateUI(val) {
+    currentValue = val;
+    const pct = getPercent(val);
+
+    fill.style.width = pct + '%';
+    thumb.style.left = pct + '%';
+
+    displayAmount.textContent = formatCurrency(val);
+    remainingAmount.textContent = formatCurrency(MAX - val);
+
+    const conversionFee = Math.round(val * CONVERSION_FEE_RATE);
+    const youGet = val - conversionFee;
+    const dailyDeduction = Math.round(val / DEDUCTION_DAYS);
+
+    const chevronSvg = ' <svg class="chevron-sm" viewBox="0 0 10 10" fill="none"><path d="M3 4L5 6L7 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    amountYouGet.innerHTML = formatCurrency(youGet) + chevronSvg;
+    amountYouPay.innerHTML = formatCurrency(val) + chevronSvg;
+
+    subWithdrawal.textContent = formatCurrency(val);
+    subConversionFee.textContent = '− ' + formatCurrency(conversionFee);
+    subNetAmount.textContent = formatCurrency(youGet);
+    subDailyDeduction.textContent = formatCurrency(dailyDeduction) + ' / day';
+    subTotalRepay.textContent = formatCurrency(val);
+  }
+
+  function getValueFromX(clientX) {
+    const rect = wrapper.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const pct = Math.max(0, Math.min(1, x / rect.width));
+    const rawVal = MIN + pct * (MAX - MIN);
+    return Math.max(MIN, Math.min(MAX, snapToStep(rawVal)));
+  }
+
+  // Touch events
+  thumb.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    const onMove = function(ev) {
+      updateUI(getValueFromX(ev.touches[0].clientX));
+    };
+    const onEnd = function() {
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+    };
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onEnd);
+  }, { passive: false });
+
+  // Mouse events
+  thumb.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    const onMove = function(ev) {
+      updateUI(getValueFromX(ev.clientX));
+    };
+    const onEnd = function() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onEnd);
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onEnd);
+  });
+
+  // Click on track
+  wrapper.addEventListener('click', function(e) {
+    if (e.target === thumb || thumb.contains(e.target)) return;
+    updateUI(getValueFromX(e.clientX));
+  });
+
+  // Initial render
+  updateUI(currentValue);
+})();
+</script>
+
+</body>
+</html>

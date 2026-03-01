@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Paytm Reserve — Your Capital, On Demand</title>
+<style>
+  :root {
+    --blue-500: #0088FF;
+    --blue-600: #1576DB;
+    --blue-700: #004299;
+    --blue-900: #012A72;
+    --blue-300: #00B8F5;
+    --blue-50: #E8F4FF;
+
+    --success-500: #34C759;
+    --success-surface: #EAFFF4;
+    --success-700: #009454;
+
+    --gold-500: #FAAB2C;
+    --gold-400: #FCCF3C;
+    --gold-200: #FDDF7D;
+
+    --neutral-900: #000000;
+    --neutral-850: #101010;
+    --neutral-800: #1B1B1B;
+    --neutral-700: #282828;
+    --neutral-600: #333333;
+    --neutral-500: #404040;
+    --neutral-400: #595959;
+    --neutral-300: #7E7E7E;
+    --neutral-200: #999999;
+    --neutral-100: #D9D9D9;
+    --neutral-50: #E6E6E6;
+
+    --surface-primary: #FFFFFF;
+    --surface-secondary: #F2F2F7;
+    --surface-tertiary: #F7F7F7;
+
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --radius-pill: 100px;
+
+    --shadow-subtle: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-card: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-medium: 0 4px 16px rgba(0,0,0,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  button, input { font-family: inherit; font-size: inherit; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', 'SF Pro Display', system-ui, sans-serif;
+    background: var(--surface-secondary);
+    color: var(--neutral-800);
+    overflow-x: hidden;
+  }
+
+  .device-frame {
+    width: 376px; height: 812px; margin: 0 auto;
+    background: var(--surface-primary);
+    position: relative; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  /* === STATUS BAR === */
+  .status-bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px 0; height: 44px;
+    background: var(--surface-primary); flex-shrink: 0;
+  }
+  .status-bar .time { font-size: 15px; font-weight: 600; }
+  .status-bar .icons { display: flex; gap: 6px; align-items: center; }
+  .status-bar .icons svg { width: 16px; height: 12px; }
+
+  /* === NAV BAR === */
+  .nav-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 16px 14px; background: var(--surface-primary);
+    position: relative; flex-shrink: 0;
+  }
+  .nav-back {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: none;
+    background: var(--surface-secondary); border-radius: 50%;
+    flex-shrink: 0; transition: background 0.15s ease;
+  }
+  .nav-back:active { background: var(--neutral-50); }
+  .nav-back svg { width: 9px; height: 16px; }
+  .nav-center {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; height: 44px;
+  }
+  .nav-brand { height: 30px; width: auto; }
+  .nav-help {
+    font-size: 15px; font-weight: 600; color: var(--neutral-800);
+    cursor: pointer; border: none; background: var(--surface-secondary);
+    padding: 8px 16px; border-radius: var(--radius-pill);
+    flex-shrink: 0; letter-spacing: -0.23px; transition: background 0.15s ease;
+  }
+  .nav-help:active { background: var(--neutral-50); }
+
+  /* === SCROLLABLE === */
+  .scroll-content {
+    flex: 1; overflow-y: auto; overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* === HERO — OFFER CARD === */
+  .offer-wrapper {
+    padding: 16px 12px 0;
+    background: var(--surface-primary);
+  }
+  .offer-card {
+    background: linear-gradient(160deg, #012A72 0%, #004299 50%, #1576DB 100%);
+    border-radius: var(--radius-xl);
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .offer-card::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .offer-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.03);
+  }
+  .offer-eyebrow {
+    font-size: 12px; font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .offer-label {
+    font-size: 15px; font-weight: 400;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: -0.23px;
+    margin-bottom: 4px;
+  }
+  .offer-amount {
+    font-size: 48px; font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.37px; line-height: 56px;
+    font-feature-settings: 'tnum';
+    margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .offer-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: var(--radius-pill);
+    padding: 8px 16px;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: -0.08px;
+  }
+  .offer-badge svg { width: 14px; height: 14px; }
+  .offer-rbi {
+    margin-top: 16px;
+    font-size: 11px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: -0.08px;
+  }
+
+  /* === SECTION SPACER === */
+  .section-spacer {
+    height: 8px; background: var(--surface-secondary); flex-shrink: 0;
+  }
+
+  /* === BENEFITS === */
+  .benefits-section {
+    padding: 16px 20px 12px;
+    background: var(--surface-primary);
+  }
+  .benefits-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--neutral-800);
+    letter-spacing: -0.23px;
+    margin-bottom: 10px;
+  }
+  .benefit-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 0;
+  }
+  .benefit-card:last-child { border-bottom: none; }
+  .benefit-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .benefit-icon svg { width: 18px; height: 18px; }
+  .benefit-content { flex: 1; }
+  .benefit-name {
+    font-size: 15px; font-weight: 600;
+    color: var(--neutral-800);
+    letter-spacing: -0.23px;
+    margin-bottom: 3px;
+  }
+  .benefit-desc {
+    font-size: 13px; font-weight: 400;
+    color: var(--neutral-400);
+    line-height: 18px; letter-spacing: -0.08px;
+  }
+
+  /* === HOW IT WORKS === */
+  .how-section {
+    padding: 24px 20px 16px;
+    background: var(--surface-primary);
+  }
+  .how-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--neutral-800);
+    letter-spacing: 0;
+    margin-bottom: 20px;
+  }
+  .how-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .how-step {
+    display: flex;
+    gap: 14px;
+    position: relative;
+  }
+  .how-step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 32px;
+    flex-shrink: 0;
+  }
+  .how-step-number {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--blue-50);
+    color: var(--blue-600);
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .how-step-line {
+    width: 2px; flex: 1;
+    background: var(--blue-50);
+    margin: 4px 0;
+    min-height: 16px;
+  }
+  .how-step:last-child .how-step-line { display: none; }
+  .how-step-content {
+    flex: 1;
+    padding-bottom: 20px;
+  }
+  .how-step:last-child .how-step-content { padding-bottom: 0; }
+  .how-step-name {
+    font-size: 15px; font-weight: 600;
+    color: var(--neutral-800);
+    letter-spacing: -0.23px;
+    margin-bottom: 2px;
+  }
+  .how-step-desc {
+    font-size: 13px; font-weight: 400;
+    color: var(--neutral-400);
+    line-height: 18px; letter-spacing: -0.08px;
+  }
+
+  /* === REVIEW DETAILS === */
+  .review-section {
+    padding: 24px 20px 8px;
+    background: var(--surface-primary);
+  }
+  .review-header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .review-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--neutral-800);
+    letter-spacing: 0;
+  }
+  .review-edit {
+    font-size: 14px; font-weight: 600;
+    color: var(--blue-500); letter-spacing: -0.23px;
+    cursor: pointer; border: none; background: none;
+    padding: 2px 0;
+  }
+  .review-subtitle {
+    font-size: 13px; font-weight: 400;
+    color: var(--neutral-400);
+    letter-spacing: -0.08px;
+    line-height: 18px;
+    margin-bottom: 20px;
+  }
+  .review-field {
+    margin-bottom: 20px;
+  }
+  .review-field:last-child { margin-bottom: 12px; }
+  .review-input-wrap {
+    position: relative;
+    border: 1.5px solid var(--success-500);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex; align-items: center;
+  }
+  .review-field-label {
+    position: absolute;
+    top: -8px; left: 12px;
+    background: var(--surface-primary);
+    padding: 0 4px;
+    font-size: 11px; font-weight: 400;
+    color: var(--neutral-300);
+    letter-spacing: -0.08px;
+  }
+  .review-field-value {
+    flex: 1;
+    font-size: 16px; font-weight: 600;
+    color: var(--neutral-800);
+    letter-spacing: 0.3px;
+  }
+  .review-field-value.email {
+    font-size: 14px; letter-spacing: 0;
+  }
+  .review-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--success-500);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .review-check svg { width: 12px; height: 12px; }
+  .review-name {
+    font-size: 13px; font-weight: 400;
+    color: var(--neutral-400);
+    letter-spacing: -0.08px;
+    margin-top: 6px;
+    padding-left: 2px;
+  }
+
+  /* === CONSENTS === */
+  .consent-section {
+    padding: 16px 20px 20px;
+    background: var(--surface-primary);
+  }
+  .consent-item {
+    display: flex; align-items: flex-start;
+    gap: 12px; padding: 10px 0;
+  }
+  .consent-item + .consent-item {
+    border-top: 1px solid rgba(0,0,0,0.04);
+  }
+  .consent-checkbox {
+    width: 22px; height: 22px;
+    border-radius: var(--radius-xs);
+    border: 2px solid var(--blue-500);
+    background: var(--blue-500);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+    cursor: pointer;
+  }
+  .consent-checkbox svg { width: 13px; height: 13px; }
+  .consent-text {
+    font-size: 13px; font-weight: 400;
+    color: var(--neutral-400);
+    line-height: 19px; letter-spacing: -0.08px;
+  }
+  .consent-text a {
+    color: var(--blue-500); font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* === STICKY CTA === */
+  .sticky-cta {
+    background: var(--surface-primary);
+    padding: 12px 16px;
+    border-top: 1px solid rgba(0,0,0,0.04);
+    position: sticky; bottom: 0; z-index: 10;
+  }
+  .sticky-cta-inner {
+    padding-bottom: env(safe-area-inset-bottom, 8px);
+  }
+  .cta-btn {
+    width: 100%; padding: 16px 0;
+    border-radius: var(--radius-pill);
+    font-size: 17px; font-weight: 600;
+    letter-spacing: -0.43px; border: none;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px; cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+    background: var(--blue-900);
+    color: var(--surface-primary);
+    box-shadow: 0 4px 16px rgba(1, 42, 114, 0.25);
+  }
+  .cta-btn:active { opacity: 0.9; transform: scale(0.985); }
+  .cta-sub {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 12px; font-weight: 400;
+    color: var(--neutral-300);
+    letter-spacing: -0.08px;
+  }
+
+  .home-indicator {
+    width: 134px; height: 5px;
+    background: var(--neutral-900); border-radius: 3px;
+    margin: 6px auto 4px; opacity: 0.18;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) both; }
+  .delay-1 { animation-delay: 0.05s; }
+  .delay-2 { animation-delay: 0.1s; }
+  .delay-3 { animation-delay: 0.15s; }
+  .delay-4 { animation-delay: 0.2s; }
+</style>
+</head>
+<body>
+
+<div class="device-frame">
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="time">9:41</span>
+    <div class="icons">
+      <svg viewBox="0 0 17 12" fill="none"><path d="M16.5 1C16.5 0.447 16.053 0 15.5 0H14.5C13.947 0 13.5 0.447 13.5 1V11C13.5 11.553 13.947 12 14.5 12H15.5C16.053 12 16.5 11.553 16.5 11V1Z" fill="currentColor"/><path d="M12 3C12 2.447 11.553 2 11 2H10C9.447 2 9 2.447 9 3V11C9 11.553 9.447 12 10 12H11C11.553 12 12 11.553 12 11V3Z" fill="currentColor"/><path d="M7.5 5.5C7.5 4.947 7.053 4.5 6.5 4.5H5.5C4.947 4.5 4.5 4.947 4.5 5.5V11C4.5 11.553 4.947 12 5.5 12H6.5C7.053 12 7.5 11.553 7.5 11V5.5Z" fill="currentColor"/><path d="M3 8C3 7.447 2.553 7 2 7H1C0.447 7 0 7.447 0 8V11C0 11.553 0.447 12 1 12H2C2.553 12 3 11.553 3 11V8Z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 16 12" fill="none"><path d="M8 3.6C9.7 3.6 11.2 4.3 12.3 5.4L13.8 3.9C12.3 2.4 10.3 1.5 8 1.5C5.7 1.5 3.7 2.4 2.2 3.9L3.7 5.4C4.8 4.3 6.3 3.6 8 3.6Z" fill="currentColor"/><path d="M8 6.8C9 6.8 9.9 7.2 10.5 7.8L12 6.3C11 5.3 9.6 4.7 8 4.7C6.4 4.7 5 5.3 4 6.3L5.5 7.8C6.1 7.2 7 6.8 8 6.8Z" fill="currentColor"/><circle cx="8" cy="10.5" r="1.5" fill="currentColor"/></svg>
+      <svg viewBox="0 0 25 12" fill="none"><rect x="0" y="1" width="21" height="10" rx="2" stroke="currentColor" stroke-width="1"/><rect x="1.5" y="2.5" width="16" height="7" rx="1" fill="currentColor"/><path d="M23 4.5V7.5C23.8 7.2 24.5 6.3 24.5 6C24.5 5.7 23.8 4.8 23 4.5Z" fill="currentColor"/></svg>
+    </div>
+  </div>
+
+  <!-- Nav Bar -->
+  <div class="nav-bar">
+    <button class="nav-back">
+      <svg viewBox="0 0 10 18" fill="none"><path d="M9 1L1 9L9 17" stroke="var(--neutral-800)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav-center">
+      <img src="../assets/brand-logo.svg" alt="Paytm Reserve" class="nav-brand">
+    </div>
+    <button class="nav-help">Help</button>
+  </div>
+
+  <!-- Scrollable Content -->
+  <div class="scroll-content">
+
+    <!-- Hero Offer Card -->
+    <div class="offer-wrapper animate-in delay-1">
+      <div class="offer-card">
+        <div class="offer-eyebrow">Pre-approved</div>
+        <div class="offer-label">Your reserve credit limit</div>
+        <div class="offer-amount">₹1,00,000</div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Benefits -->
+    <div class="benefits-section animate-in delay-2">
+      <div class="benefits-title">Why Paytm Reserve</div>
+
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background: var(--blue-50);">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L12 22M12 2L6 8M12 2L18 8" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 14H20" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round"/><path d="M6 18H18" stroke="var(--blue-600)" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="benefit-content">
+          <div class="benefit-name">Withdraw any amount</div>
+          <div class="benefit-desc">Choose how much you need from your limit. Funds hit your bank in minutes.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Review Details -->
+    <div class="review-section animate-in delay-4">
+      <div class="review-header">
+        <div class="review-title">Review your details</div>
+        <button class="review-edit">Edit</button>
+      </div>
+      <div class="review-subtitle">We have pre-filled your PAN & email</div>
+
+      <div class="review-field">
+        <div class="review-input-wrap">
+          <span class="review-field-label">PAN Number</span>
+          <span class="review-field-value">CHJJH4887Y</span>
+          <div class="review-check">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="review-name">Anoop V Kumar</div>
+      </div>
+
+      <div class="review-field">
+        <div class="review-input-wrap">
+          <span class="review-field-label">Email address</span>
+          <span class="review-field-value email">anoop.kumar@gmail.com</span>
+          <div class="review-check">
+            <svg viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consents -->
+    <div class="consent-section animate-in delay-4">
+      <div class="consent-item">
+        <div class="consent-checkbox">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="consent-text">By proceeding you consent to credit bureau checks and agree to our Terms & Conditions...<a href="#">Read More</a></div>
+      </div>
+      <div class="consent-item">
+        <div class="consent-checkbox">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="consent-text">By proceeding you consent to credit bureau checks and agree to our Terms & Conditions...<a href="#">Read More</a></div>
+      </div>
+      <div class="consent-item">
+        <div class="consent-checkbox">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M3 7L6 10L11 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="consent-text">By proceeding you consent to credit bureau checks and agree to our Terms & Conditions...<a href="#">Read More</a></div>
+      </div>
+    </div>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-cta animate-in delay-4">
+      <div class="sticky-cta-inner">
+        <button class="cta-btn" onclick="window.location.href='loader.html'">Unlock My Limit</button>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>
