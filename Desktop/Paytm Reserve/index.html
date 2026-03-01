@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paytm Reserve — Screen Index</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro', system-ui, sans-serif;
+      background: #F2F2F7;
+      color: #1B1B1B;
+      min-height: 100vh;
+      padding: 40px 24px 60px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      margin-bottom: 32px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: #0088FF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .brand-icon svg { width: 20px; height: 20px; }
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .brand-title { font-size: 18px; font-weight: 700; line-height: 22px; color: #1B1B1B; }
+    .brand-sub { font-size: 11px; font-weight: 400; color: #7E7E7E; }
+    .header-desc {
+      font-size: 13px;
+      font-weight: 400;
+      color: #7E7E7E;
+      margin-top: 8px;
+      line-height: 18px;
+    }
+
+    .section {
+      margin-bottom: 28px;
+    }
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      color: #7E7E7E;
+      padding: 0 4px;
+      margin-bottom: 10px;
+    }
+
+    .card-list {
+      background: #FFFFFF;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .screen-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      text-decoration: none;
+      color: inherit;
+      border-bottom: 1px solid #E6E6E6;
+      transition: background 0.12s;
+      cursor: pointer;
+    }
+    .screen-item:last-child { border-bottom: none; }
+    .screen-item:active { background: #F2F2F7; }
+
+    .screen-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .screen-icon svg { width: 18px; height: 18px; }
+
+    .icon-blue   { background: #E8F4FF; }
+    .icon-green  { background: #EAFFF4; }
+    .icon-orange { background: #FFF3E8; }
+    .icon-purple { background: #F3F0FF; }
+    .icon-grey   { background: #F2F2F7; }
+    .icon-gold   { background: #FFF8E6; }
+
+    .screen-body { flex: 1; min-width: 0; }
+    .screen-name {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 20px;
+      color: #1B1B1B;
+    }
+    .screen-file {
+      font-size: 12px;
+      font-weight: 400;
+      color: #7E7E7E;
+      margin-top: 1px;
+      font-family: 'SF Mono', 'Menlo', monospace;
+    }
+    .screen-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 100px;
+      flex-shrink: 0;
+    }
+    .badge-flow   { background: #E8F4FF; color: #1576DB; }
+    .badge-loader { background: #F2F2F7; color: #595959; }
+    .badge-state  { background: #EAFFF4; color: #009454; }
+    .badge-new    { background: #FFF3E8; color: #F68832; }
+
+    .chevron { color: #D9D9D9; flex-shrink: 0; }
+
+    .flow-note {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 20px;
+      color: #595959;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      margin-top: 12px;
+    }
+    .flow-note strong { color: #1B1B1B; font-weight: 600; }
+    .flow-arrow { color: #0088FF; margin: 0 3px; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 20 20" fill="none">
+          <text x="10" y="15" font-family="-apple-system,sans-serif" font-size="12" font-weight="700" fill="#fff" text-anchor="middle">₹</text>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">Merchant Loan</span>
+        <span class="brand-sub">Paytm Reserve · Screen Index</span>
+      </div>
+    </div>
+    <div class="header-desc">All screens for the Reserve Line-of-Credit merchant experience.</div>
+  </div>
+
+  <!-- ENTRY POINTS -->
+  <div class="section">
+    <div class="section-label">Entry Points</div>
+    <div class="card-list">
+
+      <a class="screen-item" href="screens/landing.html">
+        <div class="screen-icon icon-blue">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M10 2L2 7v11h5v-5h6v5h5V7L10 2z" stroke="#1576DB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Landing</div>
+          <div class="screen-file">screens/landing.html</div>
+        </div>
+        <span class="screen-badge badge-flow">Start</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="withdraw-funds_v2.html">
+        <div class="screen-icon icon-green">
+          <svg viewBox="0 0 20 20" fill="none"><rect x="2" y="5" width="16" height="12" rx="2" stroke="#009454" stroke-width="1.5"/><path d="M6 5V4a4 4 0 018 0v1" stroke="#009454" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="11" r="1.5" fill="#009454"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loan Home V2</div>
+          <div class="screen-file">withdraw-funds_v2.html</div>
+        </div>
+        <span class="screen-badge badge-new">New</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SETUP FLOW -->
+  <div class="section">
+    <div class="section-label">Setup Flow</div>
+    <div class="card-list">
+
+      <a class="screen-item" href="screens/merchant-dashboard.html">
+        <div class="screen-icon icon-orange">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#F68832" stroke-width="1.5"/><path d="M10 6v4l2 2" stroke="#F68832" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Dashboard — 0 of 3</div>
+          <div class="screen-file">screens/merchant-dashboard.html</div>
+        </div>
+        <span class="screen-badge badge-state">State</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/merchant-dashboard-kyc-done.html">
+        <div class="screen-icon icon-orange">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#F68832" stroke-width="1.5"/><path d="M10 6v4l2 2" stroke="#F68832" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Dashboard — KYC Done</div>
+          <div class="screen-file">screens/merchant-dashboard-kyc-done.html</div>
+        </div>
+        <span class="screen-badge badge-state">State</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/merchant-dashboard-penny-drop.html">
+        <div class="screen-icon icon-orange">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#F68832" stroke-width="1.5"/><path d="M10 6v4l2 2" stroke="#F68832" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Dashboard — Bank Done</div>
+          <div class="screen-file">screens/merchant-dashboard-penny-drop.html</div>
+        </div>
+        <span class="screen-badge badge-state">State</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/merchant-dashboard-all-done.html">
+        <div class="screen-icon icon-green">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#009454" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="#009454" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Dashboard — All Done</div>
+          <div class="screen-file">screens/merchant-dashboard-all-done.html</div>
+        </div>
+        <span class="screen-badge badge-state">State</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- WITHDRAWAL FLOW -->
+  <div class="section">
+    <div class="section-label">Withdrawal Flow</div>
+    <div class="card-list">
+
+      <a class="screen-item" href="screens/withdraw-funds.html">
+        <div class="screen-icon icon-blue">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M10 3v10M6 9l4 4 4-4" stroke="#1576DB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16h12" stroke="#1576DB" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Withdraw Funds</div>
+          <div class="screen-file">screens/withdraw-funds.html</div>
+        </div>
+        <span class="screen-badge badge-flow">Flow</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/post-withdrawal.html">
+        <div class="screen-icon icon-green">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#009454" stroke-width="1.5"/><path d="M7 10l2 2 4-4" stroke="#009454" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Post Withdrawal</div>
+          <div class="screen-file">screens/post-withdrawal.html</div>
+        </div>
+        <span class="screen-badge badge-flow">Flow</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loan-detail.html">
+        <div class="screen-icon icon-purple">
+          <svg viewBox="0 0 20 20" fill="none"><path d="M5 4h10a1 1 0 011 1v12a1 1 0 01-1 1H5a1 1 0 01-1-1V5a1 1 0 011-1z" stroke="#7B61FF" stroke-width="1.5"/><path d="M7 8h6M7 11h4" stroke="#7B61FF" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loan Detail</div>
+          <div class="screen-file">screens/loan-detail.html</div>
+        </div>
+        <span class="screen-badge badge-flow">Flow</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- LOADERS -->
+  <div class="section">
+    <div class="section-label">Loaders / Transitions</div>
+    <div class="card-list">
+
+      <a class="screen-item" href="screens/loader.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader (BRE Check)</div>
+          <div class="screen-file">screens/loader.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-bre.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — BRE</div>
+          <div class="screen-file">screens/loader-bre.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-kyc.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — KYC</div>
+          <div class="screen-file">screens/loader-kyc.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-bank.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — Bank</div>
+          <div class="screen-file">screens/loader-bank.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-autopay.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — AutoPay</div>
+          <div class="screen-file">screens/loader-autopay.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-disbursal.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — Disbursal</div>
+          <div class="screen-file">screens/loader-disbursal.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+      <a class="screen-item" href="screens/loader-marketplace.html">
+        <div class="screen-icon icon-grey">
+          <svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="#7E7E7E" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="screen-body">
+          <div class="screen-name">Loader — Marketplace</div>
+          <div class="screen-file">screens/loader-marketplace.html</div>
+        </div>
+        <span class="screen-badge badge-loader">Loader</span>
+        <svg class="chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- USER FLOW NOTE -->
+  <div class="section">
+    <div class="section-label">Primary User Flow</div>
+    <div class="flow-note">
+      <strong>Landing</strong>
+      <span class="flow-arrow">→</span> Loader (BRE)
+      <span class="flow-arrow">→</span> Dashboard
+      <span class="flow-arrow">→</span> KYC
+      <span class="flow-arrow">→</span> Bank
+      <span class="flow-arrow">→</span> AutoPay
+      <span class="flow-arrow">→</span> Dashboard (All Done)
+      <span class="flow-arrow">→</span> <strong>Withdraw Funds</strong>
+      <span class="flow-arrow">→</span> Loader (Disbursal)
+      <span class="flow-arrow">→</span> <strong>Loan Home V2</strong>
+    </div>
+  </div>
+
+</body>
+</html>
